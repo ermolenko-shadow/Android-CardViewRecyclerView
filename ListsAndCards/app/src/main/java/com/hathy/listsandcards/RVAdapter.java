@@ -12,6 +12,8 @@ import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
 
+    CustomItemClickListener listener;
+
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
 
         CardView cv;
@@ -30,8 +32,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
     List<Person> persons;
 
-    RVAdapter(List<Person> persons){
+    RVAdapter(List<Person> persons, CustomItemClickListener listener){
         this.persons = persons;
+        this.listener = listener;
     }
 
     @Override
@@ -42,7 +45,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     @Override
     public PersonViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
-        PersonViewHolder pvh = new PersonViewHolder(v);
+        final PersonViewHolder pvh = new PersonViewHolder(v);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(v, pvh.getPosition());
+            }
+        });
         return pvh;
     }
 
